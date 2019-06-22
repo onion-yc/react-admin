@@ -7,9 +7,9 @@ import Admin from './pages/admin';
 
 export default class App extends Component {
   render() {
-    return <div>
+    return <Switch>
       <Route path="/login" component={ Login }/>
       <Route path="/" component={ Admin }/>
-    </div>;
+    </Switch>;
   }
 }
