@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
+// import ajax from '../../api/ajax';
+import { reqLogin } from '../../api'
 import './index.less';
 
-import logo from './logo.png';
+import logo from '../../assets/images/logo.png';
 
 const Item = Form.Item;
 
@@ -12,7 +14,7 @@ class Login extends Component {
     e.preventDefault();
 
     //用来校验表单并获取表单的值
-    this.props.form.validateFields((error, valuses) => {
+    this.props.form.validateFields(async (error, valuses) => {
       //console.log(error, valuses);
       /*
         error 代表表单校验结果
@@ -22,9 +24,14 @@ class Login extends Component {
       if (!error) {
         //校验通过
         const { username, password } = valuses;
-
         //发送请求，请求登录
-        console.log(username,password);
+        const result = await reqLogin(username, password)
+
+        if( result){
+          this.props.history.replace('/');
+        }else {
+          this.props.form.resetFields(['password']);
+        }
       }else {
         console.log('登录表单校验失败：', error);
       }
