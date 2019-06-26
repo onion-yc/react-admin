@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { Icon, Menu } from "antd";
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import menuList from '../../config/menu-config';
 
 import './index.less'
 import logo from '../../assets/images/logo.png';
+
 const { SubMenu, Item } = Menu;
 
-
-export default class LeftNav extends Component {
-  // static propTypes = {
-  //   collapsed: PropTypes.bool.isRequired
-  // };
+ class LeftNav extends Component {
+  static propTypes = {
+    collapsed: PropTypes.bool.isRequired
+  };
   // state={
   //   collapsed:true
   // }
@@ -25,11 +25,12 @@ export default class LeftNav extends Component {
           <span>{menu.title}</span>
         </Link>
       </Item>
-    }
+    };
   //render 之前只做一次
   componentWillMount() {
+
     //根据menuList生成菜单
-    this.menus =menuList.map((menu) => {
+    this.menus = menuList.map((menu) => {
       // 判断是一级菜单还是二级菜单
       const children = menu.children;
       if (children) {
@@ -128,3 +129,5 @@ export default class LeftNav extends Component {
     </div>
   }
 }
+
+export default withRouter(LeftNav);

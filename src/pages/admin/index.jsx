@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import LeftNav from '../../components/left-nav';
 import HeaderMain from '../../components/header-main';
+import { getItem } from '../../utils/storage-tools';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -14,6 +15,16 @@ export default class Admin extends Component {
     console.log(collapsed);
     this.setState({ collapsed });
   };
+
+  componentWillMount () {
+    //判断登录是否成功
+    const user = getItem();
+
+    if (!user || !user._id) {
+      this.props.history.replace('/login');
+    }
+
+  }
 
     render() {
       const { collapsed } = this.state;

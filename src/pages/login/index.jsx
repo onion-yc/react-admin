@@ -2,9 +2,12 @@ import React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 // import ajax from '../../api/ajax';
 import { reqLogin } from '../../api'
-import './index.less';
+import { setItem } from '../../utils/storage-tools'
 
+//引入图片资源：在React脚手架中图片必须引入才会打包
 import logo from '../../assets/images/logo.png';
+//import 必须在最上面
+import './index.less';
 
 const Item = Form.Item;
 
@@ -28,14 +31,18 @@ function Login(props) {
 
         const result = await reqLogin(username, password);
 
-
         if (result) {
+          //登录成功
+          //只有这里能拿到用户名和密码。保存用户信息
+          setItem(result);
 
           props.history.replace('/');
         } else {
+          //登录失败
           props.form.resetFields(['password']);
         }
       } else {
+        //校验失败
         console.log('登录表单校验失败：', error);
       }
     })
