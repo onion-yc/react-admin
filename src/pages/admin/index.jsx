@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import LeftNav from '../../components/left-nav';
 import HeaderMain from '../../components/header-main';
 import { getItem } from '../../utils/storage-tools';
+import { reqValidateUserInfo } from "../../api";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -16,14 +17,23 @@ export default class Admin extends Component {
     this.setState({ collapsed });
   };
 
-  componentWillMount () {
+  async componentWillMount () {
     //判断登录是否成功
     const user = getItem();
 
-    if (!user || !user._id) {
-      this.props.history.replace('/login');
+    //优化登录成功不想再重新发送请求，redux
+
+    //用户是刷新进来的
+    if (user && user._id) {
+      //发送请求验证 用户信息是否合法
+      //若果用户是登录进来的，就不需要。如果用户是使用之前的值，刷新访问进来的，就需要
+
+      const result = await reqValidateUserInfo(user._id);
+
+      if (!result) return;
     }
 
+    this.props.history.replace('/login');
   }
 
     render() {
