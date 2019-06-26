@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Form, Icon, Input, Button, message } from 'antd';
+import React from 'react';
+import { Form, Icon, Input, Button } from 'antd';
 // import ajax from '../../api/ajax';
 import { reqLogin } from '../../api'
 import './index.less';
@@ -8,13 +8,13 @@ import logo from '../../assets/images/logo.png';
 
 const Item = Form.Item;
 
-class Login extends Component {
+function Login(props) {
 
-  login = (e) => {
+  const login = (e) => {
     e.preventDefault();
 
     //用来校验表单并获取表单的值
-    this.props.form.validateFields(async (error, valuses) => {
+    props.form.validateFields(async (error, valuses) => {
       //console.log(error, valuses);
       /*
         error 代表表单校验结果
@@ -25,20 +25,23 @@ class Login extends Component {
         //校验通过
         const { username, password } = valuses;
         //发送请求，请求登录
-        const result = await reqLogin(username, password)
 
-        if( result){
-          this.props.history.replace('/');
-        }else {
-          this.props.form.resetFields(['password']);
+        const result = await reqLogin(username, password);
+
+
+        if (result) {
+
+          props.history.replace('/');
+        } else {
+          props.form.resetFields(['password']);
         }
-      }else {
+      } else {
         console.log('登录表单校验失败：', error);
       }
     })
   }
 
-  validator = (rule, value, callback) =>{
+  const validator = (rule, value, callback) => {
     //callback 必须调用
     // console.log(rule,value);
 
@@ -46,21 +49,20 @@ class Login extends Component {
 
     if (!value) {
       callback(`必须输入${name}!`);
-    }else if (value.length < 4) {
+    } else if (value.length < 4) {
       callback(`${name}必须大于4位`);
-    }else if (value.length > 16) {
+    } else if (value.length > 16) {
       callback(`${name}必须小于16位`);
-    }else if (!/^[a-zA-Z_0-9]+$/.test(value)) {
+    } else if (!/^[a-zA-Z_0-9]+$/.test(value)) {
       callback(`${name}只能包含英文字母、数字和下划线`);
-    }else {
+    } else {
       //不传参代表校验通过，传参代表校验失败。
       callback();
     }
   }
 
-  render() {
     // getFieldDecorator也是一个高阶组件
-    const { getFieldDecorator } = this.props.form;
+    const {getFieldDecorator} = props.form;
 
     return <div className="login">
       <header className="login-header">
@@ -69,24 +71,24 @@ class Login extends Component {
       </header>
       <section className="login-content">
         <h2>用户登录</h2>
-        <Form onSubmit={this.login} className="login-from">
+        <Form onSubmit={login} className="login-from">
           <Item>
             {
               getFieldDecorator(
                 'username',
                 {
                   rules: [
-                  /*  {required: true, message: '请输入用户名！'},
-                    {min: 4, message: '用户名必须大于4位'},
-                    {max: 16, message: '用户名必须小于16位'},
-                    {pattern: /^[a-zA-Z_0-9]+$/, message: '用户名只能包含英文字母、数字和下划线'} */
+                    /*  {required: true, message: '请输入用户名！'},
+                      {min: 4, message: '用户名必须大于4位'},
+                      {max: 16, message: '用户名必须小于16位'},
+                      {pattern: /^[a-zA-Z_0-9]+$/, message: '用户名只能包含英文字母、数字和下划线'} */
                     {
-                      validator: this.validator
+                      validator: validator
                     }
                   ]
                 }
               )(
-                <Input className="login-input" prefix={<Icon type="user" />} placeholder="用户名"/>
+                <Input className="login-input" prefix={<Icon type="user"/>} placeholder="用户名"/>
               )
             }
           </Item>
@@ -97,7 +99,7 @@ class Login extends Component {
                 {
                   rules: [
                     {
-                      validator: this.validator
+                      validator: validator
                     }
                   ]
                 }
@@ -112,7 +114,7 @@ class Login extends Component {
         </Form>
       </section>
     </div>
-  }
+
 }
 
 export default Form.create()(Login);

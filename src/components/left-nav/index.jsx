@@ -11,9 +11,12 @@ const { SubMenu, Item } = Menu;
 
 
 export default class LeftNav extends Component {
-  static propTypes = {
-    collapsed: PropTypes.bool.isRequired
-  };
+  // static propTypes = {
+  //   collapsed: PropTypes.bool.isRequired
+  // };
+  // state={
+  //   collapsed:true
+  // }
 
     createMenu = (menu) => {
       return <Item key={menu.key}>
@@ -24,7 +27,7 @@ export default class LeftNav extends Component {
       </Item>
     }
   //render 之前只做一次
-  componentDidMount() {
+  componentWillMount() {
     //根据menuList生成菜单
     this.menus =menuList.map((menu) => {
       // 判断是一级菜单还是二级菜单
@@ -53,6 +56,7 @@ export default class LeftNav extends Component {
 
   render() {
     const { collapsed } = this.props;
+    // console.log(collapsed)
 
     return <div>
       <Link className="left-nav-logo" to='/home'>
