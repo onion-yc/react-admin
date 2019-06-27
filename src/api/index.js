@@ -33,4 +33,6 @@ export const reqWeather = function () {
   });
 };
 
+export const reqCategories = (parent_id) => ajax('/manage/category/list', {parent_id});
+
 
