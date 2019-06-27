@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import MyButton from '../my-botton/';
 import {getItem, removeItem} from '../../utils/storage-tools';
 import { reqWeather } from '../../api';
+import menuList from '../../config/menu-config';
 
 // import logo from '../../assets/images/logo.png';
 import './index.less';
@@ -21,6 +22,7 @@ class HeaderMain extends Component {
   componentWillMount() {
     //只需读取一次
     this.username = getItem().username;
+    this.title = this.getTitle(this.props);
   }
 
   async componentDidMount() {
@@ -36,9 +38,11 @@ class HeaderMain extends Component {
     if (result) {
         this.setState(result);
     }
-
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.title = this.getTitle(nextProps);
+  }
   //登出
   logout = () => {
     Modal.confirm({
@@ -52,9 +56,36 @@ class HeaderMain extends Component {
         this.props.history.replace('/login');
       }
     })
-  }
+  };
+
+  /**
+   * 获取title
+   * @returns {string|*}
+   */
+  getTitle = (nextProps) => {
+    // console.log('getTitle()');
+    const { pathname } = nextProps.location;
+    let title = '';
+    for (let i = 0; i < menuList.length; i++){
+      const menu = menuList[i];
+      if (menu.children){
+
+        for (let j = 0; j < menu.children.length; j++) {
+          const item = menu.children[j];
+          if (item.key === pathname) {
+            return item.title;
+          }
+        }
+      }else {
+        if (menu.key === pathname) {
+          return menu.title;
+        }
+      }
+    }
+  };
 
   render(){
+
     const { sysTime, weather, weatherImg } = this.state;
 
     return <div>
@@ -63,7 +94,7 @@ class HeaderMain extends Component {
         <MyButton onClick={this.logout}>退出</MyButton>
       </div>
       <div className="header-main-bottom">
-        <span className="header-main-left">用户管理</span>
+        <span className="header-main-left">{this.title}</span>
         <div className="header-main-right">
           <span>{dayjs(sysTime).format('YYYY-MM-DD HH:mm:ss')}</span>
           <img src={weatherImg} alt="weatherImg"/>
