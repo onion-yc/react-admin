@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Menu } from "antd";
 import { Link, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import menuList from '../../config/menu-config';
 
@@ -11,9 +11,9 @@ import logo from '../../assets/images/logo.png';
 const { SubMenu, Item } = Menu;
 
  class LeftNav extends Component {
-  static propTypes = {
-    collapsed: PropTypes.bool.isRequired
-  };
+  // static propTypes = {
+  //   collapsed: PropTypes.bool.isRequired
+  // };
   // state={
   //   collapsed:true
   // }
